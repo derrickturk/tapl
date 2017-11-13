@@ -46,13 +46,15 @@ eval sx@(Succ x) = let x' = eval x in
 -- B-PredZero, B-PredSucc
 eval px@(Pred x) = case eval x of
   Z -> Z
-  (Succ x) -> x
+  (Succ x)
+    | isNumeric x -> x
   _ -> px
 
 -- B-IsZeroZero, B-IsZeroSucc
 eval izx@(IsZero x) = case eval x of
   Z -> T
-  (Succ x) -> if isNumeric x then F else izx
+  (Succ x)
+    | isNumeric x -> F
   _ -> izx
 
 -- either a Left stuck or a Right value
