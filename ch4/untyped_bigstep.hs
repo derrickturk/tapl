@@ -26,11 +26,10 @@ isNumeric _ = False
 -- big-step evaluation rules
 --   we're imposing an evaluation strategy and order by how these
 --   rules are framed
--- we're going to use Maybe to model the possibility of "stuckness",
---   with Nothing representing "No rule applies."
 
 eval :: Term -> Term
 
+-- B-Value
 eval v
   | isValue v = v
 
