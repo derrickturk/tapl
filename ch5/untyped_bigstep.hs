@@ -35,11 +35,10 @@ shift = shift' 0 where
   shift' cutoff s (App t1 t2) = App (shift' cutoff s t1) (shift' cutoff s t2)
 
 eval :: Term -> Term
-eval v@(Abs _ _) = v
-eval (App (Abs t n) v)
-  | isValue v = eval $ shift (-1) $ subst 0 (shift 1 v) t
-  | otherwise = eval (App (Abs t n) (eval v))
-eval (App t1 t2) = eval (App (eval t1) t2)
+eval a@(App t1 t2) = case eval t1 of
+  Abs t n -> eval $ shift (-1) $ subst 0 (shift 1 (eval t2)) t
+  _ -> a
+eval x = x
 
 evalNamed :: NamedTerm -> NamedTerm
 evalNamed t = let (t', ctxt) = removeNames t in restoreNames (eval t') ctxt
