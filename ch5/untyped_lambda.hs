@@ -72,3 +72,14 @@ free n (App t1 t2) = free n t1 || free n t2
 --   we can't apply any more rules
 eval :: Term -> Term
 eval t = fromMaybe t (eval <$> eval1 t)
+
+-- a pretty-printer
+pprint :: Term -> String
+pprint (Var n) = n
+pprint (Abs n t) = "\\" ++ n ++ " . " ++ pprint t
+pprint (App t1 t2) = "(" ++ pprint t1 ++ " " ++ pprint t2 ++ ")"
+
+c0 = Abs "s" (Abs "z" (Var "z"))
+c1 = Abs "s" (Abs "z" (App (Var "s") (Var "z")))
+
+scc = Abs "n" (Abs "s" (Abs "z" (App (Var "s") (App (App (Var "n") (Var "s")) (Var "z")))))
