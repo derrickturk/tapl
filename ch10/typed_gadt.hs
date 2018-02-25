@@ -75,6 +75,7 @@ eval Z = VNat 0
 eval (Succ n) = case eval n of
   VNat n' -> VNat $ n' + 1
 eval (Prev n) = case eval n of
+  VNat 0 -> VNat 0
   VNat n' -> VNat $ n' - 1
 eval (IsZero n) = case eval n of
   VNat n' -> VBool $ n' == 0
@@ -168,3 +169,10 @@ example :: Term '[] TBool
 example = (App
     (Abs (App (Var IxZero) (Succ Z)) (SFn SNat SBool) "f")
     (Abs (IsZero (Var IxZero)) SNat "n"))
+
+{--
+example :: Term '[] TNat
+example = (App
+    (App (Abs (Abs (Var $ IxSucc IxZero) SNat "y") SNat "x") (Succ Z))
+    (Succ (Succ Z)))
+--}
